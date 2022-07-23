@@ -1,5 +1,5 @@
 import { REST } from "@discordjs/rest";
-import { APIApplicationCommandOption, Routes } from "discord-api-types/v9";
+import { APIApplicationCommandOption, Routes } from "discord-api-types/v10";
 
 import { Bot } from "../interfaces/Bot";
 
@@ -13,7 +13,7 @@ import { errorHandler } from "./errorHandler";
  */
 export const registerCommands = async (BOT: Bot): Promise<boolean> => {
   try {
-    const rest = new REST({ version: "9" }).setToken(BOT.token);
+    const rest = new REST({ version: "10" }).setToken(BOT.token);
 
     const commandData: {
       name: string;

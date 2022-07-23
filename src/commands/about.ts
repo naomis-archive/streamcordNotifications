@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 
 import { Command } from "../interfaces/CommandInt";
 import { errorHandler } from "../utils/errorHandler";
@@ -11,7 +11,7 @@ export const about: Command = {
     .setDescription("Provides information about the bot."),
   run: async (BOT, interaction) => {
     try {
-      const aboutEmbed = new MessageEmbed();
+      const aboutEmbed = new EmbedBuilder();
 
       aboutEmbed.setTitle("Streamcord Notifications");
       aboutEmbed.setDescription(

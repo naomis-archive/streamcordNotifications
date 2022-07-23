@@ -1,8 +1,8 @@
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 
 import { Bot } from "./Bot";
 
 export type NotificationHandler = (
   BOT: Bot,
-  interaction: CommandInteraction
+  interaction: ChatInputCommandInteraction
 ) => Promise<void>;
