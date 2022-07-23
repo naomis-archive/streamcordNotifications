@@ -1,5 +1,10 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { GuildBasedChannel, MessageEmbed } from "discord.js";
+import {
+  GuildBasedChannel,
+  EmbedBuilder,
+  ChannelType,
+  PermissionFlagsBits,
+} from "discord.js";
 
 import NotificationModel from "../database/NotificationModel";
 import { NotificationHandler } from "../interfaces/NotificationHandler";
@@ -18,16 +23,23 @@ export const createNotification: NotificationHandler = async (
     const time = interaction.options.getNumber("time", true);
     const content = interaction.options.getString("content", true);
 
-    if (!["GUILD_TEXT", "GUILD_NEWS"].includes(channel.type)) {
+    if (
+      ![ChannelType.GuildText, ChannelType.GuildNews].includes(channel.type)
+    ) {
       await interaction.editReply({
         content: "I can only send notifications in text channels.",
       });
       return;
     }
 
+    const me =
+      channel.guild.members.cache.get(BOT.user?.id || "nope") ||
+      (await channel.guild.members.fetch(BOT.user?.id || "nope"));
+
     if (
-      !interaction.guild?.me?.permissionsIn(channel).has("SEND_MESSAGES") ||
-      !interaction.guild?.me?.permissionsIn(channel).has("VIEW_CHANNEL")
+      !me ||
+      !me.permissionsIn(channel).has(PermissionFlagsBits.SendMessages) ||
+      !me.permissionsIn(channel).has(PermissionFlagsBits.ViewChannel)
     ) {
       await interaction.editReply({
         content: "I don't have permission to send messages in this channel.",
@@ -67,13 +79,24 @@ export const createNotification: NotificationHandler = async (
     // eslint-disable-next-line require-atomic-updates
     BOT.notifications[newNumber] = newNotification;
 
-    const createdEmbed = new MessageEmbed();
+    const createdEmbed = new EmbedBuilder();
     createdEmbed.setTitle("Notification created");
     createdEmbed.setDescription("The following notification was created:");
-    createdEmbed.addField("Notification Channel", `<#${channel.id}>`);
-    createdEmbed.addField("Frequency", `${time} minutes`);
-    createdEmbed.addField("Content", content);
-    createdEmbed.setFooter(`Notification #${newNumber}`);
+    createdEmbed.addFields([
+      {
+        name: "Notification Channel",
+        value: `<#${channel.id}>`,
+      },
+      {
+        name: "Frequency",
+        value: `${time} minutes`,
+      },
+      {
+        name: "Content",
+        value: content,
+      },
+    ]);
+    createdEmbed.setFooter({ text: `Notification #${newNumber}` });
 
     await interaction.editReply({ embeds: [createdEmbed] });
 

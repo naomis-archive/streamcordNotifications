@@ -3,6 +3,7 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
 } from "@discordjs/builders";
+import { PermissionFlagsBits } from "discord.js";
 
 import { Command } from "../interfaces/CommandInt";
 import { createNotification } from "../notifications/createNotification";
@@ -67,7 +68,7 @@ export const notification: Command = {
       if (
         !member ||
         typeof member.permissions === "string" ||
-        !member.permissions.has("MANAGE_GUILD")
+        !member.permissions.has(PermissionFlagsBits.ManageGuild)
       ) {
         await interaction.editReply({
           content: "You do not have permission to manage notifications.",

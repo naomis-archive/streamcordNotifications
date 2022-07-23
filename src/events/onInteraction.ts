@@ -11,7 +11,7 @@ export const onInteraction = async (
   BOT: Bot,
   interaction: Interaction
 ): Promise<void> => {
-  if (!interaction.isCommand()) {
+  if (!interaction.isChatInputCommand()) {
     return;
   }
 

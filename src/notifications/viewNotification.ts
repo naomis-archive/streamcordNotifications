@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 
 import { NotificationHandler } from "../interfaces/NotificationHandler";
 import { errorHandler } from "../utils/errorHandler";
@@ -20,11 +20,22 @@ export const viewNotification: NotificationHandler = async (
       return;
     }
 
-    const notificationEmbed = new MessageEmbed();
+    const notificationEmbed = new EmbedBuilder();
     notificationEmbed.setTitle(`Notification ${number}`);
-    notificationEmbed.addField("Channel", `<#${target.channelId}>`);
-    notificationEmbed.addField("Frequency", `${target.frequency} minutes`);
-    notificationEmbed.addField("Content", target.content);
+    notificationEmbed.addFields([
+      {
+        name: "Channel",
+        value: `<#${target.channelId}>`,
+      },
+      {
+        name: "Frequency",
+        value: `${target.frequency} minutes`,
+      },
+      {
+        name: "Content",
+        value: target.content,
+      },
+    ]);
 
     await interaction.editReply({ embeds: [notificationEmbed] });
   } catch (error) {

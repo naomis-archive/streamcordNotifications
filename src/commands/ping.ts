@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { MessageEmbed, TextChannel } from "discord.js";
+import { EmbedBuilder, TextChannel } from "discord.js";
 
 import { Command } from "../interfaces/CommandInt";
 import { errorHandler } from "../utils/errorHandler";
@@ -15,7 +15,7 @@ export const ping: Command = {
 
       const timeDiff = Date.now() - createdTimestamp;
 
-      const pongEmbed = new MessageEmbed();
+      const pongEmbed = new EmbedBuilder();
 
       pongEmbed.setTitle("Pong");
       pongEmbed.setDescription(`Response Time: ${timeDiff}ms`);
